@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using sullied_data;
+using sullied_services;
+using sullied_services.Services;
 
 namespace sullied
 {
@@ -31,8 +33,12 @@ namespace sullied
             Configuration.Bind(appSettings);
             var connectionString = appSettings.ConnectionStrings.SulliedConnection;
 
+            AutoMapperConfiguration.Initialize();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<SulliedDbContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

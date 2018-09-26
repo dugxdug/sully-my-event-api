@@ -5,4 +5,12 @@
     <RootNamespace>sullied_services</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\sullied-data\sullied-data.csproj" />
+  </ItemGroup>
+
 </Project>
