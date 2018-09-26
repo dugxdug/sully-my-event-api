@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using sullied_data;
+using sullied_data.Models;
 using sullied_services.Models;
 
 namespace sullied_services.Services
@@ -30,6 +31,23 @@ namespace sullied_services.Services
             var user = _db.Users.ProjectTo<User>().ToList();
 
             return user;
+        }
+
+        public int CreateUser(User userToCreate)
+        {
+            var newUser = new UserEntity
+            {
+                FirstName = userToCreate.FirstName,
+                LastName = userToCreate.LastName,
+                Email = userToCreate.Email,
+                Password = userToCreate.Password
+            };
+
+            var user = _db.Users.Add(newUser);
+
+            var result = _db.SaveChanges();
+
+            return result;
         }
     }
 }

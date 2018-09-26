@@ -8,7 +8,7 @@ namespace sullied_data.Models
     [Table("User")]
     public class UserEntity
     {
-        protected UserEntity() { }
+        public UserEntity() { }
 
         [Key]
         public int Id { get; set; }
