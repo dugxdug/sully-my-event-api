@@ -55,9 +55,7 @@ namespace sullied_services.Services
 
             vote.LocationId = value.LocationId;
 
-            return _db.SaveChanges();
-
-            
+            return _db.SaveChanges();      
         }
 
         public int CreateEvent(Event eventToCreate)
