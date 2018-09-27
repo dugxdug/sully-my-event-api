@@ -52,9 +52,10 @@ namespace sullied.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}/vote")]
+        public void Put(int userId, int id, [FromBody] EventUser value)
         {
+            var result = _eventService.AddVote(userId, id, value);
         }
 
         // DELETE api/values/5

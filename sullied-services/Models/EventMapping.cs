@@ -18,6 +18,7 @@ namespace sullied_services.Models
                 .ForMember(x => x.CreatedBy, opt => opt.MapFrom(x => x.User.FirstName + " " + x.User.LastName))
                 .ForMember(x => x.CreatedById, opt => opt.MapFrom(x => x.User.Id))
                 .ForMember(x => x.EventTime, opt => opt.MapFrom(x => x.Time))
+                .ForMember(x => x.SelectedLocations, opt => opt.Ignore())
                 .ForMember(x => x.EventLocations, opt => opt.MapFrom(x => x.EventLocations));
         }
     }

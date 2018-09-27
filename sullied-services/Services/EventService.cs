@@ -40,18 +40,59 @@ namespace sullied_services.Services
 
         public List<Location> GetEventLocations(int userId, int id)
         {
-            var eventLocations = _db.Locations.Where(x => x.EventLocations.FirstOrDefault(el => el.EventId == id) != null).ProjectTo<Location>().ToList();
+<<<<<<< HEAD
+            var eventLocations = _db.Locations
+                .Where(
+                    x => x.EventLocations
+                        .Where(el => el.EventId == id && el.Event.EventUsers.FirstOrDefault(eu => eu.UserId == userId && eu.LocationId == null) != null)
+                        .FirstOrDefault() != null).ProjectTo<Location>().ToList();
 
+=======
+            var eventLocations = _db.Locations.Where(x => x.EventLocations.FirstOrDefault(el => el.EventId == id) != null).ProjectTo<Location>().ToList();
+>>>>>>> a8c9f56b173a33f25903add88f3e0dca2b90f9ea
 
             return eventLocations;
         }
 
+        public int AddVote(int userId, int id, EventUser value)
+        {
+            var vote = _db.EventUsers.FirstOrDefault(x => x.UserId == userId && x.EventId == id);
+
+            vote.LocationId = value.LocationId;
+
+            return _db.SaveChanges();
+
+            
+        }
+
         public int CreateEvent(Event eventToCreate)
         {
-            var locations = new List<EventLocationEntity>();
-            foreach (var location in eventToCreate.EventLocations)
+            var newLocations = new List<LocationEntity>();
+            foreach(var locationToAdd in eventToCreate.SelectedLocations)
             {
-                locations.Add(new EventLocationEntity { LocationId = location.LocationId });
+                if(_db.Locations.Any(x => x.YelpId == locationToAdd.YelpId))
+                {
+                    break;
+                }
+                _db.Locations.Add(new LocationEntity
+                {
+                    YelpId = locationToAdd.YelpId,
+                    Price = locationToAdd.Price,
+                    Rating = locationToAdd.Rating,
+                    Name = locationToAdd.Name,
+                    Address = locationToAdd.Address,
+                    ImageUrl = locationToAdd.ImageUrl,
+                    Url = locationToAdd.Url
+                });
+            }
+
+            _db.SaveChanges();
+
+            var locations = new List<EventLocationEntity>();
+            foreach (var locationToAdd in eventToCreate.SelectedLocations)
+            {
+                var location = _db.Locations.FirstOrDefault(x => x.YelpId == locationToAdd.YelpId);
+                locations.Add(new EventLocationEntity { LocationId = location.Id });
             }
 
             var users = new List<EventUserEntity>();
