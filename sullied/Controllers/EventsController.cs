@@ -8,36 +8,47 @@ using sullied_services.Services;
 
 namespace sullied.Controllers
 {
-    [Route("v1/[controller]")]
+    [Route("v1/users/{userId}/events")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class EventsController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IEventService _eventService;
 
-        public UsersController(IUserService userService)
+        public EventsController(IEventService eventService)
         {
-            _userService = userService;
+            _eventService = eventService;
         }
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<Event> Get(int userId)
         {
-            return _userService.GetUsers();
+            return _eventService.GetEvents(userId);
+        }
+
+        [HttpGet("{id}/me")]
+        public IEnumerable<Event> GetMyEvents(int userId)
+        {
+            return _eventService.GetMyEvents(userId);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public User Get(int id)
+        public Event Get(int userId, int id)
         {
-            return _userService.GetUser(id);
+            return _eventService.GetEvent(userId,id);
         }
 
+        [HttpGet("{id}/locations")]
+        public IEnumerable<Location> GetLocations(int userId, int id)
+        {
+            return _eventService.GetEventLocations(userId, id);
+        }
         // POST api/values
         [HttpPost]
-        public int Post([FromBody] User user)
+        public int Post([FromBody] Event eventModel)
         {
-            return _userService.CreateUser(user);
+            return _eventService.CreateEvent(eventModel);
         }
 
         // PUT api/values/5

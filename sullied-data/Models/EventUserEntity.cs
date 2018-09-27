@@ -5,7 +5,7 @@ namespace sullied_data.Models
     [Table("EventUser")]
     public class EventUserEntity
     {
-        protected EventUserEntity() { }
+        public EventUserEntity() { }
         public int UserId { get; set; }
         public UserEntity User { get; set; }
         public int EventId { get; set; }

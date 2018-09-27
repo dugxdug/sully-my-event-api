@@ -39,6 +39,7 @@ namespace sullied
             services.AddDbContext<SulliedDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IEventService, EventService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

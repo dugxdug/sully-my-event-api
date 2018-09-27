@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace sullied_services.Services
 {
-    public interface IUserService
+    public interface IEventService
     {
-        List<User> GetUsers();
-        User GetUser(int userId);
-        int CreateUser(User userToCreate);
+        List<Event> GetEvents(int userId);
+        Event GetEvent(int userId, int eventId);
+        int CreateEvent(Event eventToCreate);
+        List<Event> GetMyEvents(int userId);
+        List<Location> GetEventLocations(int userId, int Id);
     }
 }

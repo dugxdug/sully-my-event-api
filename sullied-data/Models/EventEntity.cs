@@ -8,7 +8,7 @@ namespace sullied_data.Models
     [Table("Event")]
     public class EventEntity
     {
-        protected EventEntity() { }
+        public EventEntity() { }
 
         [Key]
         public int Id { get; set; }
