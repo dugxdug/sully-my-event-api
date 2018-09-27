@@ -5,7 +5,7 @@ namespace sullied_data.Models
     [Table("EventLocation")]
     public class EventLocationEntity
     {
-        protected EventLocationEntity() { }
+        public EventLocationEntity() { }
 
         public int EventId { get; set; }
         public EventEntity Event { get; set; }
