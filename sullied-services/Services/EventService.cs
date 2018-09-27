@@ -140,7 +140,7 @@ namespace sullied_services.Services
 
             var result = _db.SaveChanges();
 
-            return result;
+            return newEvent.Id;
         }
     }
 }
