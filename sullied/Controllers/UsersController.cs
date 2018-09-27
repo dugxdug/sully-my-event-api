@@ -35,7 +35,7 @@ namespace sullied.Controllers
 
         // POST api/values
         [HttpPost]
-        public int Post([FromBody] User user)
+        public User Post([FromBody] User user)
         {
             return _userService.CreateUser(user);
         }

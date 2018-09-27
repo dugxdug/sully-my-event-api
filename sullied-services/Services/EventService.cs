@@ -21,12 +21,12 @@ namespace sullied_services.Services
         }
         public Event GetEvent(int userId, int eventId)
         {
-            return  _db.Events.Where(x => x.EventUsers.Where(eu => eu.UserId == userId).FirstOrDefault() != null && x.Id == eventId).ProjectTo<Event>().FirstOrDefault();
+            return  _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null && x.Id == eventId).ProjectTo<Event>().FirstOrDefault();
         }
 
         public List<Event> GetEvents(int userId)
         {
-            var events = _db.Events.Where(x => x.EventUsers.Where(eu => eu.UserId == userId).FirstOrDefault() != null).ProjectTo<Event>().ToList();
+            var events = _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null).ProjectTo<Event>().ToList();
 
             return events;
         }
@@ -40,8 +40,7 @@ namespace sullied_services.Services
 
         public List<Location> GetEventLocations(int userId, int id)
         {
-            var eventLocations = _db.Locations.Where(x => x.EventLocations.Where(el => el.EventId == id).FirstOrDefault() != null).ProjectTo<Location>().ToList();
-
+            var eventLocations = _db.Locations.Where(x => x.EventLocations.FirstOrDefault(el => el.EventId == id) != null).ProjectTo<Location>().ToList();
 
             return eventLocations;
         }
@@ -74,7 +73,6 @@ namespace sullied_services.Services
             {
                 var location = _db.Locations.FirstOrDefault(x => x.YelpId == locationToAdd.YelpId);
                 locations.Add(new EventLocationEntity { LocationId = location.Id });
-
             }
 
             var users = new List<EventUserEntity>();

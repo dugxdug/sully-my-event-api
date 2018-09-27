@@ -1,4 +1,5 @@
-﻿using sullied_data;
+﻿using AutoMapper.QueryableExtensions;
+using sullied_data;
 using sullied_services.Models;
 using System;
 using System.Collections.Generic;
@@ -16,17 +17,17 @@ namespace sullied_services.Services
             _db = context;
         }
 
-        public int LoginUser(User User)
+        public User LoginUser(User User)
         {
-            var user = _db.Users.Where(x => x.Email == User.Email && x.Password == User.Password).Select(x => new { x.Id }).FirstOrDefault();
+            var user = _db.Users.Where(x => x.Email == User.Email && x.Password == User.Password).ProjectTo<User>().FirstOrDefault();
 
             if(user == null)
             {
-                return 0;
+                return null;
             }
             else
             {
-               return user.Id;
+               return user;
             }
         }
     }

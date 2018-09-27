@@ -20,7 +20,7 @@ namespace sullied.Controllers
         }
         
         [HttpPost]
-        public int Post([FromBody] User user)
+        public User Post([FromBody] User user)
         {
             return _loginService.LoginUser(user);
         }
