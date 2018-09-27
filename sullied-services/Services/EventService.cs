@@ -39,6 +39,8 @@ namespace sullied_services.Services
                 }
             }
 
+            events = events.OrderBy(x => x.EventTime).ToList();
+
             return events;
         }
 
