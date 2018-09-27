@@ -27,6 +27,17 @@ namespace sullied_services.Services
         public List<Event> GetEvents(int userId)
         {
             var events = _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null).ProjectTo<Event>().ToList();
+            foreach(var singleEvent in events)
+            {
+                var voted = singleEvent.EventUsers.FirstOrDefault(x => x.UserId == userId && x.LocationId != null);
+                if (voted == null)
+                {
+                    singleEvent.HasVoted = false;
+                } else
+                {
+                    singleEvent.HasVoted = true;
+                }
+            }
 
             return events;
         }

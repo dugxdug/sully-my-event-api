@@ -20,6 +20,7 @@ namespace sullied_services.Models
                 .ForMember(x => x.EventTime, opt => opt.MapFrom(x => x.Time))
                 .ForMember(x => x.SelectedLocations, opt => opt.Ignore())
                 .ForMember(x => x.ImageUrl, opt => opt.Ignore())
+                .ForMember(x => x.HasVoted, opt => opt.Ignore())
                 .ForMember(x => x.EventLocations, opt => opt.MapFrom(x => x.EventLocations));
         }
     }
