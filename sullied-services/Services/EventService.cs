@@ -69,6 +69,24 @@ namespace sullied_services.Services
             return _db.SaveChanges();      
         }
 
+        public int ClosePoll(int id)
+        {
+            var thisEvent = _db.Events.FirstOrDefault(x => x.Id == id);
+
+            var voteCounts = _db.EventUsers
+             .Where(x => x.EventId == id)
+             .GroupBy(p => new { p.LocationId })
+             .Select(g => new { id = g.Key.LocationId, count = g.Count() })
+             .ToList();
+
+            var highestVote = voteCounts.OrderBy(x => x.count).FirstOrDefault();
+
+            thisEvent.LocationId = highestVote.id;
+            thisEvent.ImageUrl = _db.Locations.Where(x => x.Id == highestVote.id).Select(x => x.ImageUrl).FirstOrDefault();
+
+            return _db.SaveChanges();
+        }
+
         public int CreateEvent(Event eventToCreate)
         {
             var newLocations = new List<LocationEntity>();

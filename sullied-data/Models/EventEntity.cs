@@ -18,6 +18,7 @@ namespace sullied_data.Models
         public int? LocationId { get; set; }
         [ForeignKey("User")]
         public int CreatedBy { get; set; }
+        public string ImageUrl { get; set; }
 
         public virtual UserEntity User { get; set; }
         public ICollection<EventUserEntity> EventUsers { get; set; }
