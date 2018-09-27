@@ -14,6 +14,7 @@ namespace sullied_services.Models
         public string ImageUrl { get; set; }
         public string CreatedBy { get; set; }
         public int CreatedById { get; set; }
+        public bool HasVoted { get; set; }
         public List<Location> SelectedLocations { get; set; }
         public List<EventLocation> EventLocations { get; set; }
         public List<EventUser> EventUsers { get; set; }
