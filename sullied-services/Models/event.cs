@@ -11,6 +11,7 @@ namespace sullied_services.Models
         public string Description { get; set; }
         public DateTime EventTime { get; set; }
         public string LocationId { get; set; }
+        public string ImageUrl { get; set; }
         public string CreatedBy { get; set; }
         public int CreatedById { get; set; }
         public List<Location> SelectedLocations { get; set; }
