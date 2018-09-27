@@ -10,6 +10,6 @@ namespace sullied_services.Services
     {
         List<User> GetUsers();
         User GetUser(int userId);
-        int CreateUser(User userToCreate);
+        User CreateUser(User userToCreate);
     }
 }

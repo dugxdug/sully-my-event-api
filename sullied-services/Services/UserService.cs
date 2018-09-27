@@ -33,7 +33,7 @@ namespace sullied_services.Services
             return user;
         }
 
-        public int CreateUser(User userToCreate)
+        public User CreateUser(User userToCreate)
         {
             var newUser = new UserEntity
             {
@@ -47,7 +47,7 @@ namespace sullied_services.Services
 
             var result = _db.SaveChanges();
 
-            return result;
+            return _db.Users.Where(x => x.Id == result).ProjectTo<User>().FirstOrDefault();
         }
     }
 }
