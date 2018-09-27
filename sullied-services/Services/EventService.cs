@@ -40,9 +40,22 @@ namespace sullied_services.Services
 
         public List<Location> GetEventLocations(int userId, int id)
         {
-            var eventLocations = _db.Locations.Where(x => x.EventLocations.FirstOrDefault(el => el.EventId == id) != null).ProjectTo<Location>().ToList();
+            var eventLocations = _db.Locations
+                .Where(
+                    x => x.EventLocations
+                        .Where(el => el.EventId == id && el.Event.EventUsers.FirstOrDefault(eu => eu.UserId == userId && eu.LocationId == null) != null)
+                        .FirstOrDefault() != null).ProjectTo<Location>().ToList();
 
             return eventLocations;
+        }
+
+        public int AddVote(int userId, int id, EventUser value)
+        {
+            var vote = _db.EventUsers.FirstOrDefault(x => x.UserId == userId && x.EventId == id);
+
+            vote.LocationId = value.LocationId;
+
+            return _db.SaveChanges();      
         }
 
         public int CreateEvent(Event eventToCreate)
