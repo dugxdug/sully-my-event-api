@@ -65,7 +65,7 @@ namespace sullied_services.Services
             {
                 if(_db.Locations.Any(x => x.YelpId == locationToAdd.YelpId))
                 {
-                    break;
+                    continue;
                 }
                 _db.Locations.Add(new LocationEntity
                 {
