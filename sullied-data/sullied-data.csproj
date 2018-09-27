@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20180927142720_minorChanges.cs" />
+    <Compile Remove="Migrations\20180927143334_minorChanges.cs" />
   </ItemGroup>
 
   <ItemGroup>

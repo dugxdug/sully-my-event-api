@@ -21,7 +21,7 @@ namespace sullied_services.Services
         }
         public Event GetEvent(int userId, int eventId)
         {
-            return  _db.Events.Where(x => x.EventUsers.Any(eu => eu.UserId == userId) && x.Id == eventId).ProjectTo<Event>().FirstOrDefault();
+            return  _db.Events.Where(x => x.EventUsers.Where(eu => eu.UserId == userId).FirstOrDefault() != null && x.Id == eventId).ProjectTo<Event>().FirstOrDefault();
         }
 
         public List<Event> GetEvents(int userId)
@@ -40,7 +40,7 @@ namespace sullied_services.Services
 
         public List<Location> GetEventLocations(int userId, int id)
         {
-            var eventLocations = _db.Locations.Where(x => x.EventLocations.Any(el => el.EventId == id)).ProjectTo<Location>().ToList();
+            var eventLocations = _db.Locations.Where(x => x.EventLocations.Where(el => el.EventId == id).FirstOrDefault() != null).ProjectTo<Location>().ToList();
 
 
             return eventLocations;

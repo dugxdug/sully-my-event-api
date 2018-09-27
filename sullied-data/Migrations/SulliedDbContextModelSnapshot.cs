@@ -84,9 +84,9 @@ namespace sullied_data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Price");
+                    b.Property<string>("Price");
 
-                    b.Property<int>("Rating");
+                    b.Property<double>("Rating");
 
                     b.Property<string>("Url");
 

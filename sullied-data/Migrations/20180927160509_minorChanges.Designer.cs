@@ -10,7 +10,7 @@ using sullied_data;
 namespace sullied_data.Migrations
 {
     [DbContext(typeof(SulliedDbContext))]
-    [Migration("20180927143334_minorChanges")]
+    [Migration("20180927160509_minorChanges")]
     partial class minorChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,9 +86,9 @@ namespace sullied_data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Price");
+                    b.Property<string>("Price");
 
-                    b.Property<int>("Rating");
+                    b.Property<double>("Rating");
 
                     b.Property<string>("Url");
 

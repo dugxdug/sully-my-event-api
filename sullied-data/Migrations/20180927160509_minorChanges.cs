@@ -6,6 +6,18 @@ namespace sullied_data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<double>(
+                name: "Rating",
+                table: "Location",
+                nullable: false,
+                oldClrType: typeof(int));
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Price",
+                table: "Location",
+                nullable: true,
+                oldClrType: typeof(int));
+
             migrationBuilder.AddColumn<string>(
                 name: "Url",
                 table: "Location",
@@ -26,6 +38,19 @@ namespace sullied_data.Migrations
             migrationBuilder.DropColumn(
                 name: "YelpId",
                 table: "Location");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Rating",
+                table: "Location",
+                nullable: false,
+                oldClrType: typeof(double));
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Price",
+                table: "Location",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldNullable: true);
         }
     }
 }
