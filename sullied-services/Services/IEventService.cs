@@ -13,5 +13,6 @@ namespace sullied_services.Services
         int CreateEvent(Event eventToCreate);
         List<Event> GetMyEvents(int userId);
         List<Location> GetEventLocations(int userId, int Id);
+        int AddVote(int userId, int id, EventUser value);
     }
 }
