@@ -47,7 +47,14 @@ namespace sullied_services.Services
 
             var result = _db.SaveChanges();
 
-            return _db.Users.Where(x => x.Id == result).ProjectTo<User>().FirstOrDefault();
+            return new User
+            {
+                FirstName = userToCreate.FirstName,
+                LastName = userToCreate.LastName,
+                Email = userToCreate.Email,
+                Password = userToCreate.Password,
+                Id = result
+            };
         }
     }
 }
