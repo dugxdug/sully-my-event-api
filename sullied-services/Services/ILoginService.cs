@@ -7,6 +7,6 @@ namespace sullied_services.Services
 {
     public interface ILoginService
     {
-        int LoginUser(User User);
+        User LoginUser(User User);
     }
 }
