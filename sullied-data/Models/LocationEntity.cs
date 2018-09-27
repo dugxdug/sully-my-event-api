@@ -7,7 +7,7 @@ namespace sullied_data.Models
     [Table("Location")]
     public class LocationEntity
     {
-        protected LocationEntity() { }
+        public LocationEntity() { }
 
         [Key]
         public int Id { get; set;  }
