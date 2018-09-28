@@ -57,6 +57,8 @@ namespace sullied_services.Services
                 singleEvent.PollResults = pollResults;
             }
 
+            events = events.OrderBy(x => x.EventTime).ToList();
+
             return events;
         }
 
@@ -156,7 +158,7 @@ namespace sullied_services.Services
 
             var result = _db.SaveChanges();
 
-            return result;
+            return newEvent.Id;
         }
 
         public List<PollResults> GetPollResults(int id)
