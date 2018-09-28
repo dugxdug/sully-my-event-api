@@ -97,7 +97,7 @@ namespace sullied_services.Services
             var thisEvent = _db.Events.FirstOrDefault(x => x.Id == id);
 
             var voteCounts = _db.EventUsers
-             .Where(x => x.EventId == id)
+             .Where(x => x.EventId == id && x.LocationId != null)
              .GroupBy(p => new { p.LocationId })
              .Select(g => new { id = g.Key.LocationId, count = g.Count() })
              .ToList();
@@ -115,7 +115,7 @@ namespace sullied_services.Services
             {
                 attendees.Add(new EventAttendee() { Email = userEmail });
             }
-
+            _db.SaveChanges();
             UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 new ClientSecrets
                 {
