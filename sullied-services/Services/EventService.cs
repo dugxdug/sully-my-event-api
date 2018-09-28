@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Services;
 using sullied_data;
 using sullied_data.Models;
 using sullied_services.Models;
+using GoogleEvent = Google.Apis.Calendar.v3.Data.Event;
 
 namespace sullied_services.Services
 {
@@ -19,14 +23,14 @@ namespace sullied_services.Services
         {
             _db = context;
         }
-        public Event GetEvent(int userId, int eventId)
+        public Models.Event GetEvent(int userId, int eventId)
         {
-            return  _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null && x.Id == eventId).ProjectTo<Event>().FirstOrDefault();
+            return  _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null && x.Id == eventId).ProjectTo<Models.Event>().FirstOrDefault();
         }
 
-        public List<Event> GetEvents(int userId)
+        public List<Models.Event> GetEvents(int userId)
         {
-            var events = _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null).ProjectTo<Event>().ToList();
+            var events = _db.Events.Where(x => x.EventUsers.FirstOrDefault(eu => eu.UserId == userId) != null).ProjectTo<Models.Event>().ToList();
             foreach(var singleEvent in events)
             {
                 var voted = singleEvent.EventUsers.FirstOrDefault(x => x.UserId == userId && x.LocationId != null);
@@ -62,10 +66,9 @@ namespace sullied_services.Services
             return events;
         }
 
-        public List<Event> GetMyEvents(int userId)
+        public List<Models.Event> GetMyEvents(int userId)
         {
-            var events = _db.Events.Where(x => x.User.Id == userId).ProjectTo<Event>().ToList();
-            
+            var events = _db.Events.Where(x => x.User.Id == userId).ProjectTo<Models.Event>().ToList();
             return events;
         }
 
@@ -89,7 +92,7 @@ namespace sullied_services.Services
             return _db.SaveChanges();      
         }
 
-        public int ClosePoll(int id)
+        public async Task<int> ClosePoll(int id)
         {
             var thisEvent = _db.Events.FirstOrDefault(x => x.Id == id);
 
@@ -98,16 +101,73 @@ namespace sullied_services.Services
              .GroupBy(p => new { p.LocationId })
              .Select(g => new { id = g.Key.LocationId, count = g.Count() })
              .ToList();
-
+            
             var highestVote = voteCounts.OrderBy(x => x.count).FirstOrDefault();
 
             thisEvent.LocationId = highestVote.id;
             thisEvent.ImageUrl = _db.Locations.Where(x => x.Id == highestVote.id).Select(x => x.ImageUrl).FirstOrDefault();
 
+            var userEmails = _db.Users.Where(x => x.EventUsers.Any(e => e.EventId == thisEvent.Id)).Select(x => x.Email).ToList();
+
+            var attendees = new List<EventAttendee>();
+
+            foreach (var userEmail in userEmails)
+            {
+                attendees.Add(new EventAttendee() { Email = userEmail });
+            }
+
+            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                new ClientSecrets
+                {
+                    ClientId = "622377041033-1r91b6n360ic1f847kf1l3cdhliqg7r5.apps.googleusercontent.com",
+                    ClientSecret = "dQRudG8v-JrDnTHBpM8rDoSN",
+                },
+                new[] { CalendarService.Scope.Calendar },
+                "user",
+                CancellationToken.None).Result;
+
+            // Create the service.
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "Calendar API Sample",
+            });
+
+            GoogleEvent newEvent = new Google.Apis.Calendar.v3.Data.Event()
+            {
+                Summary = thisEvent.Title,
+                Location = _db.Locations.FirstOrDefault(x => x.Id == thisEvent.LocationId).Name,
+                Description = thisEvent.Description,
+                Start = new EventDateTime()
+                {
+                    DateTime = thisEvent.Time,
+                    TimeZone = "America/New_York"
+                },
+                End = new EventDateTime()
+                {
+                    DateTime = thisEvent.Time.AddHours(1),
+                    TimeZone = "America/New_York",
+                },
+                Attendees = attendees,
+                Reminders = new Google.Apis.Calendar.v3.Data.Event.RemindersData()
+                {
+                    UseDefault = false,
+                    Overrides = new EventReminder[] {
+                        new EventReminder() { Method = "email", Minutes = 24 * 60 }
+                    }
+                }
+            };
+
+            String calendarId = "primary";
+            EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
+            request.SendNotifications = true;
+            GoogleEvent createdEvent = request.Execute();
+            Console.WriteLine("Event created: {0}", createdEvent.HtmlLink);
+
             return _db.SaveChanges();
         }
 
-        public int CreateEvent(Event eventToCreate)
+        public int CreateEvent(Models.Event eventToCreate)
         {
             var newLocations = new List<LocationEntity>();
             foreach(var locationToAdd in eventToCreate.SelectedLocations)
