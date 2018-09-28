@@ -20,9 +20,9 @@ namespace sullied.Controllers
         }
         // PUT api/values/5
         [HttpPatch("{id}/close-poll")]
-        public void Put(int id)
+        public async void Put(int id)
         {
-            var result = _eventService.ClosePoll(id);
+            await _eventService.ClosePoll(id);
         }
     }
 }

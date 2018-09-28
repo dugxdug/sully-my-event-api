@@ -18,4 +18,10 @@
     <ProjectReference Include="..\sullied-services\sullied-services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
