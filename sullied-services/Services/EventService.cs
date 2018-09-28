@@ -42,6 +42,24 @@ namespace sullied_services.Services
                     singleEvent.HasVoted = true;
                 }
             }
+            foreach (var singleEvent in events)
+            {
+                var voteCounts = _db.EventUsers
+               .Where(x => x.EventId == singleEvent.Id)
+               .GroupBy(p => new { p.LocationId })
+               .Select(g => new { id = g.Key.LocationId, count = g.Count() }).ToList();
+
+                var locationNames = _db.Locations.Where(x => voteCounts.Select(vc => vc.id).Contains(x.Id)).ToList();
+
+                var pollResults = new List<PollResults>();
+
+                foreach (var location in locationNames)
+                {
+                    pollResults.Add(new PollResults() { LocationName = location.Name, NumberOfVotes = voteCounts.Where(x => x.id == location.Id).First().count });
+                }
+
+                singleEvent.PollResults = pollResults;
+            }
 
             events = events.OrderBy(x => x.EventTime).ToList();
 
@@ -51,7 +69,6 @@ namespace sullied_services.Services
         public List<Models.Event> GetMyEvents(int userId)
         {
             var events = _db.Events.Where(x => x.User.Id == userId).ProjectTo<Models.Event>().ToList();
-
             return events;
         }
 
@@ -202,6 +219,25 @@ namespace sullied_services.Services
             var result = _db.SaveChanges();
 
             return newEvent.Id;
+        }
+
+        public List<PollResults> GetPollResults(int id)
+        {
+            var voteCounts = _db.EventUsers
+               .Where(x => x.EventId == id)
+               .GroupBy(p => new { p.LocationId })
+               .Select(g => new { id = g.Key.LocationId, count = g.Count() }).ToList();
+
+            var locationNames = _db.Locations.Where(x => voteCounts.Select(vc => vc.id).Contains(x.Id)).ToList();
+
+            var pollResults = new List<PollResults>();
+
+            foreach(var location in locationNames)
+            {
+                pollResults.Add(new PollResults() { LocationName = location.Name, NumberOfVotes = voteCounts.Where(x => x.id == location.Id).First().count });
+            }
+
+            return pollResults;
         }
     }
 }

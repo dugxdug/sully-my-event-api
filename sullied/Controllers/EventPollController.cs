@@ -24,5 +24,11 @@ namespace sullied.Controllers
         {
             await _eventService.ClosePoll(id);
         }
+
+        [HttpGet("{id}/poll-results")]
+        public IEnumerable<PollResults> GetResults(int id)
+        {
+            return _eventService.GetPollResults(id);
+        } 
     }
 }
