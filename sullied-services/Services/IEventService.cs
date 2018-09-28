@@ -9,6 +9,7 @@ namespace sullied_services.Services
     public interface IEventService
     {
         List<Event> GetEvents(int userId);
+        List<PollResults> GetPollResults(int id);
         Event GetEvent(int userId, int eventId);
         int CreateEvent(Event eventToCreate);
         List<Event> GetMyEvents(int userId);

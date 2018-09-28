@@ -19,12 +19,10 @@ namespace sullied_services.Models
                 .ForMember(x => x.CreatedById, opt => opt.MapFrom(x => x.User.Id))
                 .ForMember(x => x.EventTime, opt => opt.MapFrom(x => x.Time))
                 .ForMember(x => x.SelectedLocations, opt => opt.Ignore())
-<<<<<<< HEAD
+
                 .ForMember(x => x.ImageUrl, opt => opt.Ignore())
                 .ForMember(x => x.HasVoted, opt => opt.Ignore())
-=======
-                .ForMember(x => x.ImageUrl, opt => opt.MapFrom(x => x.ImageUrl))
->>>>>>> c3ce4deec6b5ceac393c27b372823bf66fa6a76c
+                .ForMember(x => x.PollResults, opt => opt.Ignore())
                 .ForMember(x => x.EventLocations, opt => opt.MapFrom(x => x.EventLocations));
         }
     }

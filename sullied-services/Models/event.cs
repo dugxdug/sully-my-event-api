@@ -18,5 +18,6 @@ namespace sullied_services.Models
         public List<Location> SelectedLocations { get; set; }
         public List<EventLocation> EventLocations { get; set; }
         public List<EventUser> EventUsers { get; set; }
+        public List<PollResults> PollResults { get; set; }
     }
 }
